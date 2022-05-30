@@ -1,0 +1,19 @@
+{
+  "name": "study-oop",
+  "version": "1.0.0",
+  "description": "studies oop capabilities of js",
+  "main": "exercise01.js",
+  "scripts": {
+    "exercise01": "node exercise01.js",
+    "exercise02": "node exercise02.js",
+    "exercise03": "node exercise03.js",
+    "exercise04": "node exercise04.js"
+  },
+  "keywords": [
+    "oop",
+    "class",
+    "object"
+  ],
+  "author": "Binnur Kurt <binnur.kurt@gmail.com>",
+  "license": "MIT"
+}

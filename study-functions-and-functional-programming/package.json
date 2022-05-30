@@ -1,0 +1,12 @@
+{
+  "name": "study-functions-and-functional-programming",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "exercise01": "node exercise01.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
