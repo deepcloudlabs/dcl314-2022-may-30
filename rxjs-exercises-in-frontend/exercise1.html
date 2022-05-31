@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise #1</title>
+    <script type="application/javascript"
+            src="js/lib/rx.all.js"></script>
+    <script type="application/javascript">
+        window.onload = () => {
+            let counter = 0;
+            Rx.Observable.fromEvent(
+                document.querySelector(".box"),
+                'click'
+            ).throttle(3000).subscribe(event => {
+                counter++;
+                document.querySelector("#counter").innerText = counter;
+            });
+            let btnCounter = 0;
+            let observableBtnClicks = Rx.Observable.fromEvent(document.querySelector("#btn"), 'click');
+            observableBtnClicks.subscribe(event => {
+                btnCounter++;
+                setTimeout(() => {
+                    document.querySelector("#btnCounter1").innerText = btnCounter;
+                }, 1500);
+            })
+            observableBtnClicks.subscribe(event => {
+                document.querySelector("#btnCounter2").innerText = btnCounter;
+            })
+        };
+    </script>
+    <style>
+        .box {
+            width: 256px;
+            height: 256px;
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+<button id="btn">Click me!</button>
+<h1 id="btnCounter1">0</h1>
+<h1 id="btnCounter2">0</h1>
+<div class="box">
+    <span id="counter">0</span>
+</div>
+</body>
+</html>

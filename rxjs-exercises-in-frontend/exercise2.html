@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise #2</title>
+    <script type="application/javascript" src="js/lib/rx.all.js"></script>
+    <script type="application/javascript" src="js/lib/rx.dom.js"></script>
+    <script type="application/javascript">
+        window.onload = () => {
+            Rx.DOM.get("resources/movies.json")
+                .subscribe(data => {
+                    let movies = JSON.parse(data.response);
+                    let observableMovies = Rx.Observable.from(movies);
+                    observableMovies.subscribe(async movie => {
+                        if (movie.directors.length > 1) console.log(movie.title);
+                    });
+                    observableMovies.subscribe(async movie => {
+                        if (movie.year >= 1970 && movie.year < 1980) console.log(movie.title);
+                    });
+                })
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>

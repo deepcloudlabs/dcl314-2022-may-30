@@ -1,12 +1,17 @@
 {
-  "name": "study-modularity",
+  "name": "algortrading-system-with-kafka-and-rabbitmq",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "commonjs",
+  "dependencies": {
+    "ws": "^8.7.0",
+    "nodemon": "^2.0.16",
+    "rxjs": "^7.5.5",
+    "node-rdkafka": "^2.13.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

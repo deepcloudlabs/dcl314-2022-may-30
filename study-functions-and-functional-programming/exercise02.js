@@ -58,4 +58,6 @@ let to_sum = (x, y) => {
     return x + y;
 }
 sum = reduce(map(filter(filter(circles, first_quadrant), redish_circle), to_circle_area), to_sum, 0);
+circles.filter(first_quadrant).filter(redish_circle).map(to_circle_area).reduce(to_sum);
+
 console.log(`Sum of the circle areas in first quadrant: ${sum}`)
