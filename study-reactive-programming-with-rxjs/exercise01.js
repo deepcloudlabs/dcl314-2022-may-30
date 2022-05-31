@@ -28,9 +28,14 @@ const trades = new Observable((observer) => {
 let to_trade = raw_trade => {
     return {"price": Number(raw_trade.p), "quantity": Number(raw_trade.q)};
 }
-let bufferedTrades = trades.pipe(bufferCount(100,100))
+let to_volume = trade => {
+    return {...trade, "volume": trade.price * trade.quantity};
+}
+let bufferedTrades = trades.pipe(bufferCount(200,200))
 let shapedTrades = bufferedTrades.pipe(
     map((trades,index) => trades.map(to_trade)),
-    map((trades,index) => trades.reduce((sum,trade)=>sum + trade.price*trade.quantity,0))
+    map((trades,index) => trades.map(to_volume)),
+    map((trades,index) => trades.reduce((sum,trade)=>sum + trade.volume,0)),
+    map((volume,index) => volume.toFixed(1))
 )
 shapedTrades.subscribe(console.log);
