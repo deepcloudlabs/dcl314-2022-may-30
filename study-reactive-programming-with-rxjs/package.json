@@ -1,0 +1,18 @@
+{
+  "name": "study-reactive-programming-with-rxjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "exercise01.js",
+  "scripts": {
+    "exercise01": "nodemon exercise01.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "ws": "^8.7.0",
+    "nodemon": "^2.0.16",
+    "rxjs": "^7.5.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
