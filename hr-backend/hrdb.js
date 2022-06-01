@@ -1,3 +1,12 @@
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/hr",{
+    "useNewUrlParser": true,
+    "socketTimeoutMS": 0,
+    "keepAlive": true,
+    "useUnifiedTopology": true
+});
+
 const departmentSchema = new mongoose.Schema({
     "name": {
         type: String,
@@ -6,8 +15,7 @@ const departmentSchema = new mongoose.Schema({
     }
 });
 
-const validators = require("customer-validators");
-const mongoose = require("mongoose");
+const validators = require("./custom-validators");
 
 const employeeSchema = new mongoose.Schema({
     "_id": mongoose.Schema.Types.ObjectId,
@@ -40,4 +48,6 @@ const employeeSchema = new mongoose.Schema({
     "department": departmentSchema
 });
 
-exports.employeeSchema = employeeSchema;
+const Employee = mongoose.model("employees",employeeSchema);
+
+exports.Employee = Employee;

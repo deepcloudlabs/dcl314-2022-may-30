@@ -18,21 +18,33 @@ api.use(function(req,res,next){
 })
 //endregion
 
-//region integration
-const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/hr",{
-    "useNewUrlParser": true,
-    "socketTimeoutMS": 0,
-    "keepAlive": true,
-    "useUnifiedTopology": true
-});
-//endregion
-const schemas = require("mongo-schemas");
-const Employee = mongoose.model("employees",schemas.employeeSchema);
+const hr = require("./hrdb");
 
 //region rest over http
+//  i) Resource-oriented REST API -> Resource Representation : application/json
+// ii) RPC-style REST API -> gRPC -> Protocol Buffers (https://grpc.io/) (https://www.cncf.io/projects/)
 
-//endregion
+// http://localhost:8100/hr/api/v1/employees?page=10&size=25
+api.get("/hr/api/v1/employees", async (req,res) => {
+   const pageNo = Number(req.query.page) || 0;
+   const pageSize = Number(req.query.size) || 10;
+   if (!Number.isFinite(pageNo) || !Number.isFinite(pageSize))
+       res.status(400).send({status: "failed", reason: "page is invalid"});
+});
+
+api.get("/hr/api/v1/employees/:identity", async (req,res) => {
+});
+
+api.post("/hr/api/v1/employees", async (req,res) => {})
+
+api.put("/hr/api/v1/employees/:identity", async (req,res) => {})
+
+api.patch("/hr/api/v1/employees/:identity", async (req,res) => {})
+
+api.delete("/hr/api/v1/employees/:identity", async (req,res) => {
+});
+
+    //endregion
 
 //region rest over websocket
 
