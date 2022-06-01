@@ -55,6 +55,17 @@ api.get("/world/api/v1/continents", async (req,res) => {
     });
 })
 
+// http://localhost:9100/world/api/v1/countries?continent=Antarctica
+// http://localhost:9100/world/api/v1/countries
+api.get("/world/api/v1/countries", async (req,res) => {
+    const continent = req.query.continent || "Asia";
+    Country.find({continent},(err,countries) => {
+       res.set("Content-Type", "application/json");
+       res.status(200).send(countries);
+    });
+})
+
+
 api.listen(port);
 console.log(`backend is listening ${port}`);
 //endregion
