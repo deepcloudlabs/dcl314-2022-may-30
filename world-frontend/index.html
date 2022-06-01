@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>World Countries</title>
+    <style>
+        @import "node_modules/bootstrap/dist/css/bootstrap.css";
+    </style>
+    <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
+    <script src="js/world.js"></script>
+</head>
+<body>
+<div class="container">
+    <p></p>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">World Card</h4>
+        </div>
+        <div class="card-body">
+            <label class="form-label" for="continent">Continent:</label>
+            <select class="form-select"
+                    data-bind="options: continents, value: continent"
+                    id="continent">
+            </select>
+            <button data-bind="click: getContinentCountries"
+                    class="btn btn-success">List</button>
+        </div>
+    </div>
+    <p></p>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">World Countries</h4>
+            <p></p>
+            <span class="badge bg-danger" data-bind="text: population"></span>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Population</th>
+                    <th>Surface Area</th>
+                    <th>GNP</th>
+                    <th>Independence Year</th>
+                    <th>Government Form</th>
+                </tr>
+                </thead>
+                <tbody data-bind="foreach: {data: countries, as: 'country'}">
+                    <tr>
+                        <td data-bind="text: $index() + 1"></td>
+                        <td data-bind="text: country.name"></td>
+                        <td data-bind="text: country.population"></td>
+                        <td data-bind="text: country.surfaceArea"></td>
+                        <td data-bind="text: country.gnp"></td>
+                        <td data-bind="text: country.indepYear"></td>
+                        <td data-bind="text: country.governmentForm"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
