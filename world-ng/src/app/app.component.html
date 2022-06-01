@@ -1,0 +1,49 @@
+<div class="container">
+  <p></p>
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title">World Card</h4>
+    </div>
+    <div class="card-body">
+      <label class="form-label" for="continent">Continent:</label>
+      <select [(ngModel)]="continent" class="form-select" id="continent">
+        <option *ngFor="let cont of continents" [ngValue]="cont">{{cont}}</option>
+      </select>
+      <button (click)="list()" class="btn btn-success">List</button>
+    </div>
+  </div>
+  <p></p>
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-title">World Countries</h4>
+      <p></p>
+      <span class="badge bg-danger" data-bind="text: population"></span>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-hover table-striped table-responsive">
+        <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Population</th>
+          <th>Surface Area</th>
+          <th>GNP</th>
+          <th>Independence Year</th>
+          <th>Government Form</th>
+        </tr>
+        </thead>
+        <tbody data-bind="foreach: {data: countries, as: 'country'}">
+        <tr *ngFor="let country of countries;index as i">
+          <td>{{i+1}}</td>
+          <td>{{country.name}}</td>
+          <td>{{country.population}}</td>
+          <td>{{country.surfaceArea}}</td>
+          <td>{{country.gnp}}</td>
+          <td>{{country.indepYear}}</td>
+          <td>{{country.governmentForm}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
