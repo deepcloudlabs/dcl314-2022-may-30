@@ -42,9 +42,20 @@ const countrySchema = new mongoose.Schema({
     "continent": String,
     "cities": [citySchema]
 })
+
+const Country = mongoose.model("countries1", countrySchema);
 //endregion
 
 //region rest api
+// http://localhost:9100/world/api/v1/continents
+api.get("/world/api/v1/continents", async (req,res) => {
+    Country.distinct("continent", (err, continents) => {
+       res.set("Content-Type", "application/json");
+       res.status(200).send(continents);
+    });
+})
 
+api.listen(port);
+console.log(`backend is listening ${port}`);
 //endregion
 
