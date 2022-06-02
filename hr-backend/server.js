@@ -34,11 +34,10 @@ const updatableFields = ["salary", "photo", "iban", "fulltime", "department"];
 
 // http://localhost:8100/hr/api/v1/employees?page=10&size=25
 api.get("/hr/api/v1/employees", async (req, res) => {
-    const pageNo = Number(req.query.page) || 1;
-    const pageSize = Number(req.query.size) || 10;
+    const pageNo = Number(req.query.page || 0);
+    const pageSize = Number(req.query.size || 10);
     const offset = pageSize * pageNo;
-    if (!Number.isFinite(pageNo) || !Number.isFinite(pageSize))
-        res.status(400).send({status: "failed", reason: "page is invalid"});
+    res.set("Content-Type", "application/json");
     hr.Employee.find({},{},{skip: offset, limit: pageSize})
         .then( employees => res.status(200).send(employees))
         .catch( err => res.status(400).send(err) )
@@ -72,8 +71,12 @@ function updateEmployee(emp, res, identityNo) {
         {identityNo},
         {$set: updated_emp},
         {upsert: false}
-    ).then(() => res.status(200).send({"status": "ok"}))
-        .catch(err => res.status(400).send(err));
+    ).then((updateResult) => {
+        if (updateResult.modifiedCount > 0)
+           res.status(200).send({"status": "ok"});
+        else
+           res.status(404).send({"status": "failed", "reason": "cannot find the employee."});
+    }).catch(err => res.status(400).send(err));
 }
 
 api.put("/hr/api/v1/employees/:identity", async (req, res) => {

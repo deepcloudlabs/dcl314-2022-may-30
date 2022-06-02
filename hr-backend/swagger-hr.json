@@ -60,6 +60,17 @@
           "Employees"
         ],
         "summary": "Get all employees in system",
+        "parameters" : [
+          {
+            "in" : "query",
+            "name": "page",
+            "schema": "integer"
+          },{
+            "in" : "query",
+            "name": "size",
+            "schema": "integer"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
