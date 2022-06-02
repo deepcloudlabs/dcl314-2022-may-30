@@ -19,6 +19,7 @@ api.use(function (req, res, next) {
 //endregion
 
 const hr = require("./hrdb");
+const updatableFields = ["salary", "photo", "iban"];
 
 //region rest over http
 //  i) Resource-oriented REST API -> Resource Representation : application/json
@@ -28,25 +29,65 @@ const hr = require("./hrdb");
 
 // http://localhost:8100/hr/api/v1/employees?page=10&size=25
 api.get("/hr/api/v1/employees", async (req, res) => {
-    const pageNo = Number(req.query.page) || 0;
+    const pageNo = Number(req.query.page) || 1;
     const pageSize = Number(req.query.size) || 10;
+    const offset = pageSize * pageNo;
     if (!Number.isFinite(pageNo) || !Number.isFinite(pageSize))
         res.status(400).send({status: "failed", reason: "page is invalid"});
+    hr.Employee.find({},{},{skip: offset, limit: pageSize})
+        .then( employees => res.status(200).send(employees))
+        .catch( err => res.status(400).send(err) )
 });
 
 api.get("/hr/api/v1/employees/:identity", async (req, res) => {
+    const identity = req.params.identity;
+    res.set("Content-Type", "application/json");
+    hr.Employee.findOne({'identityNo': identity})
+               .then( emp => res.status(200).send(emp))
+               .catch( err => res.status(400).send(err));
 });
 
 api.post("/hr/api/v1/employees", async (req, res) => {
+    const hired_employee = req.body;
+    hired_employee._id = hired_employee.identityNo;
+    const employee = new hr.Employee(hired_employee);
+    res.set("Content-Type", "application/json");
+    employee.save().then( () => res.status(200).send({"status": "ok"}))
+                   .catch( err => res.status(400).send(err) );
 })
 
+function updateEmployee(emp, res, identityNo) {
+    const updated_emp = {};
+    for (let key in emp) {
+        if (updatableFields.includes(key))
+            updated_emp[key] = emp[key];
+    }
+    res.set("Content-Type", "application/json");
+    hr.Employee.updateOne(
+        {identityNo},
+        {$set: updated_emp},
+        {upsert: false}
+    ).then(() => res.status(200).send({"status": "ok"}))
+        .catch(err => res.status(400).send(err));
+}
+
 api.put("/hr/api/v1/employees/:identity", async (req, res) => {
+    const identityNo = req.params.identity;
+    const emp = req.body;
+    updateEmployee(emp, res, identityNo);
 })
 
 api.patch("/hr/api/v1/employees/:identity", async (req, res) => {
+    const identityNo = req.params.identity;
+    const emp = req.body;
+    updateEmployee(emp, res, identityNo);
 })
 
 api.delete("/hr/api/v1/employees/:identity", async (req, res) => {
+    const identityNo = req.params.identity;
+    hr.Employee.findOneAndDelete({identityNo})
+               .then(() => res.status(200).send({"status": "ok"}))
+               .catch(err => res.status(400).send(err));
 });
 
 //endregion
