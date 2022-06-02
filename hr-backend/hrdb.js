@@ -7,14 +7,6 @@ mongoose.connect("mongodb://localhost:27017/hr",{
     "useUnifiedTopology": true
 });
 
-const departmentSchema = new mongoose.Schema({
-    "name": {
-        type: String,
-        required: false,
-        enum: ["IT", "Sales", "Finance", "HR"]
-    }
-});
-
 const validators = require("./custom-validators");
 
 const employeeSchema = new mongoose.Schema({
@@ -45,7 +37,21 @@ const employeeSchema = new mongoose.Schema({
         required: true,
         validate: [validators.ibanValidator, "You must provide a valid iban!"]
     },
-    "department": departmentSchema
+    "department": {
+        type: String,
+        required: true,
+        enum: ["IT", "Sales", "Finance", "HR"]
+    },
+    "birthYear": {
+        "type": "number",
+        "required": true,
+        max : 2004
+    },
+    "fulltime": {
+        "type": "boolean",
+        "required": true,
+        "default": true
+    }
 });
 
 const Employee = mongoose.model("employees",employeeSchema);
