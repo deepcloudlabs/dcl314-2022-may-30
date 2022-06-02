@@ -38,17 +38,17 @@ api.get("/hr/api/v1/employees", async (req, res) => {
     const pageSize = Number(req.query.size || 10);
     const offset = pageSize * pageNo;
     res.set("Content-Type", "application/json");
-    hr.Employee.find({},{},{skip: offset, limit: pageSize})
-        .then( employees => res.status(200).send(employees))
-        .catch( err => res.status(400).send(err) )
+    hr.Employee.find({}, {}, {skip: offset, limit: pageSize})
+        .then(employees => res.status(200).send(employees))
+        .catch(err => res.status(400).send(err))
 });
 
 api.get("/hr/api/v1/employees/:identity", async (req, res) => {
     const identity = req.params.identity;
     res.set("Content-Type", "application/json");
     hr.Employee.findOne({'identityNo': identity})
-               .then( emp => res.status(200).send(emp))
-               .catch( err => res.status(400).send(err));
+        .then(emp => res.status(200).send(emp))
+        .catch(err => res.status(400).send(err));
 });
 
 api.post("/hr/api/v1/employees", async (req, res) => {
@@ -56,8 +56,11 @@ api.post("/hr/api/v1/employees", async (req, res) => {
     hired_employee._id = hired_employee.identityNo;
     const employee = new hr.Employee(hired_employee);
     res.set("Content-Type", "application/json");
-    employee.save().then( () => res.status(200).send({"status": "ok"}))
-                   .catch( err => res.status(400).send(err) );
+    employee.save().then(() => {
+            res.status(200).send({"status": "ok"});
+            sessions.forEach(socket => io.emit("hr-events", {"identity": hired_employee.identityNo, "event": "hired"}));
+        }
+    ).catch(err => res.status(400).send(err));
 })
 
 function updateEmployee(emp, res, identityNo) {
@@ -73,9 +76,9 @@ function updateEmployee(emp, res, identityNo) {
         {upsert: false}
     ).then((updateResult) => {
         if (updateResult.modifiedCount > 0)
-           res.status(200).send({"status": "ok"});
+            res.status(200).send({"status": "ok"});
         else
-           res.status(404).send({"status": "failed", "reason": "cannot find the employee."});
+            res.status(404).send({"status": "failed", "reason": "cannot find the employee."});
     }).catch(err => res.status(400).send(err));
 }
 
@@ -94,15 +97,30 @@ api.patch("/hr/api/v1/employees/:identity", async (req, res) => {
 api.delete("/hr/api/v1/employees/:identity", async (req, res) => {
     const identityNo = req.params.identity;
     hr.Employee.findOneAndDelete({identityNo})
-               .then(() => res.status(200).send({"status": "ok"}))
-               .catch(err => res.status(400).send(err));
+        .then(() => {
+            res.status(200).send({"status": "ok"});
+            sessions.forEach(socket => io.emit("hr-events", {"identity": identityNo, "event": "fired"}));
+        })
+        .catch(err => res.status(400).send(err));
 });
 
 //endregion
 
-//region rest over websocket
 
-//endregion
-
-api.listen(port);
+const service = api.listen(port);
 console.log(`backend is listening ${port}`);
+//region rest over websocket
+const io = require("socket.io")(service,{
+    "origins": "*:*"
+});
+const sessions = [];
+io.on("connect", socket => {
+    sessions.push(socket);
+    io.on("disconnect", () => {
+        let index = sessions.indexOf(socket);
+        if (index >= 0) {
+            sessions.splice(index, 1);
+        }
+    })
+});
+//endregion
