@@ -68,30 +68,6 @@
             }
           }
         }
-      },
-      "put": {
-        "summary": "Update employee",
-        "tags": [
-          "Employees"
-        ],
-        "parameters": [
-          {
-            "name": "employee",
-            "in": "body",
-            "description": "Employee that we want to update",
-            "schema": {
-              "$ref": "#/definitions/Employee"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Employee is updated",
-            "schema": {
-              "$ref": "#/definitions/Employee"
-            }
-          }
-        }
       }
     },
     "/employees/{identityNo}": {
@@ -112,6 +88,30 @@
         "responses": {
           "200": {
             "description": "Employee is found",
+            "schema": {
+              "$ref": "#/definitions/Employee"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update employee",
+        "tags": [
+          "Employees"
+        ],
+        "parameters": [
+          {
+            "name": "employee",
+            "in": "body",
+            "description": "Employee that we want to update",
+            "schema": {
+              "$ref": "#/definitions/Employee"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Employee is updated",
             "schema": {
               "$ref": "#/definitions/Employee"
             }

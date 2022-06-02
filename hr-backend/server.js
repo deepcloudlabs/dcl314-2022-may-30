@@ -16,10 +16,15 @@ api.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin,Content-Type,Accept");
     next();
 })
+
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-hr.json");
+api.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 //endregion
 
 const hr = require("./hrdb");
-const updatableFields = ["salary", "photo", "iban"];
+const updatableFields = ["salary", "photo", "iban", "fulltime", "department"];
 
 //region rest over http
 //  i) Resource-oriented REST API -> Resource Representation : application/json
