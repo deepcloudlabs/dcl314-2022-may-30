@@ -8,6 +8,8 @@
     </style>
     <script src="node_modules/knockout/build/output/knockout-latest.debug.js"></script>
     <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="js/model/employee.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/hr.js"></script>
 </head>
 <body>
@@ -75,7 +77,7 @@
                 <label class="control-label"
                        for="photo">Photo</label>
                 <img  id="photo"
-                      data-bind="attr: {src: fileData().dataUrl}"
+
                       class="thumbnail"
                       style="width: 64px;"/>
                 <label class="btn btn-info">
@@ -131,7 +133,9 @@
                 <!-- ko foreach: {data: employees, as: 'emp'}-->
                 <tr>
                     <td data-bind="text: $index() + 1"></td>
-                    <td><img class="photo" data-bind="attr: {src: emp.photo}"></td>
+                    <td><img class="photo"
+                             style="width: 32px;"
+                             data-bind="attr: {src: 'data:image/png;base64,'.concat(emp.photo)}"></td>
                     <td data-bind="text: emp.identityNo"></td>
                     <td data-bind="text: emp.fullname"></td>
                     <td data-bind="text: emp.salary"></td>
