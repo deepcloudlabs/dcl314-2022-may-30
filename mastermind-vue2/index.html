@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastermind (vue)</title>
+    <style type="text/css">
+        @import url('node_modules/bootstrap/dist/css/bootstrap.css');
+        @import url('node_modules/bootstrap/dist/css/bootstrap-theme.css');
+    </style>
+    <script type="application/javascript" src="node_modules/jquery/dist/jquery.js"></script>
+    <script type="application/javascript" src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="application/javascript" src="node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+<p/>
+<div id="app" class="container" role="main">
+    <div class="row col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Game Console</h3>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <label for="guess">Guess:</label>
+                    <input id="guess" v-model="guess" class="form-control" type="text"/>
+                    <button id="playButton" v-on:click="play" class="btn btn-success">Play</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Game Statistics</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="counter">Counter:</label>
+                        <span id="counter">{{counter}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tries">Tries:</label>
+                        <span id="tries">{{tries}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="wins">Wins:</label>
+                        <span id="wins">{{wins}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="loses">Loses:</label>
+                        <span id="loses">{{loses}}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="total">Total:</label>
+                        <span id="total">{{total}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Moves</h3>
+                </div>
+                <div class="panel-body">
+                    <utable v-bind:items="moves"
+                            v-bind:columns="movesColumns"
+                            v-bind:properties="movesProperties"></utable>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript" src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Panel</title>
+    <style type="text/css">
+        @import "css/bootstrap.css";
+        @import "css/bootstrap-theme.css";
+        @import "css/toastr.css";
+    </style>
+    <script type="application/javascript" src="js/lib/jquery-1.11.3.js"></script>
+    <script type="application/javascript" src="js/lib/bootstrap.js"></script>
+    <script type="application/javascript" src="js/lib/toastr.min.js"></script>
+    <script type="application/javascript" src="js/lib/vue.js"></script>
+    <script type="application/javascript" src="js/hr-config.js"></script>
+    <script type="application/javascript" src="js/hr-util.js"></script>
+    <script type="application/javascript" src="js/app.js"></script>
+</head>
+<body>
+    <p>
+    <div id="app" class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h3 class="panel-title">Employee Panel</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="identityNo">Identity No</label>
+                    <input type="text"
+                           id="identityNo"
+                           v-model="identityNo"
+                           class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Fullname</label>
+                    <input type="text"
+                           v-model="fullname"
+                           id="fullName"
+                           class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="salary">Salary</label>
+                    <input type="text"
+                           v-model="salary"
+                           id="salary"
+                           class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="iban">IBAN</label>
+                    <input type="text"
+                           v-model="iban"
+                           id="iban"
+                           class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department"
+                            v-model="department"
+                            class="form-control">
+                        <option>IT</option>
+                        <option>Sales</option>
+                        <option>Finance</option>
+                        <option>HR</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="photo">Photo</label>
+                    <img   v-bind:src="photo" data-bind="attr: {src: photo}"
+                            style="width: 64px; height: 64px;">
+                    <label class="btn btn-info btn-file">
+                        <input type="file"
+                           id="photo"
+                           @change="processFile($event)"
+                           style="display: none;"
+                           class="form-control">
+                        <span>Browse</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button v-on:click="addEmployee"  class="btn btn-info">Add</button>
+                    <button v-on:click="updateEmployee" class="btn btn-warning">Update</button>
+                    <button  v-on:click="removeEmployee" class="btn btn-danger">Remove</button>
+                    <button class="btn btn-success"
+                            v-on:click="findByIdentity">Find</button>
+                    <button data-bind="click: findAll"
+                            v-on:click="findAll"
+                            class="btn btn-success">Find All</button>
+                </div>
+                </div>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-11">
+                        <h3 class="panel-title">Employees</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-responsive">
+                    <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Identity No</th>
+                        <th>Full name</th>
+                        <th>Salary</th>
+                        <th>Iban</th>
+                        <th>Department</th>
+                        <th>Birth Year</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(emp,i) in employees" @mouseover="copyEmployee(emp)">
+                            <td><img v-bind:src="emp.photo"
+                                    style="width: 32px; height: 32px; border-radius: 16px;"></td>
+                            <td>{{emp.identityNo}}</td>
+                            <td>{{emp.fullname}}</td>
+                            <td>{{emp.salary}}</td>
+                            <td>{{emp.iban}}</td>
+                            <td>{{emp.department}}</td>
+                            <td>{{emp.birthYear}}</td>
+                            <td><button @click="removeRow(emp,i)" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>Total Salary:</td>
+                            <td colspan="4">{{totalSalary}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>Average Salary:</td>
+                            <td colspan="4">{{averageSalary}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
