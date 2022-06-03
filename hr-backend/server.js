@@ -110,17 +110,19 @@ api.delete("/hr/api/v1/employees/:identity", async (req, res) => {
 const service = api.listen(port);
 console.log(`backend is listening ${port}`);
 //region rest over websocket
-const io = require("socket.io")(service,{
-    "origins": "*:*"
+const io = require("socket.io")(service, {
+    "cors": {
+        "origin": "*",
+        "methods": ["GET", "POST"]
+    }
 });
-const sessions = [];
+let sessions = [];
 io.on("connect", socket => {
+    console.log(`New connection has arrived: ${socket.id}`);
     sessions.push(socket);
     io.on("disconnect", () => {
-        let index = sessions.indexOf(socket);
-        if (index >= 0) {
-            sessions.splice(index, 1);
-        }
+        sessions = sessions.filter(_socket => _socket.id !== socket.id);
+        console.log(`Connection has dropped: ${socket.id}`)
     })
 });
 //endregion
